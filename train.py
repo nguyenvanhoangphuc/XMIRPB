@@ -61,7 +61,6 @@ def retrieval_accuracy(output, target, topk=(1,)):
 def evaluate(model, loader, device):
     model.eval()
     embeds, labels = [], []
-    dists, targets = None, None
 
     for data in loader:
         samples, _labels = data[0].to(device), data[1]
@@ -192,13 +191,6 @@ def main(args):
         print('Training...')
         train_epoch(model, optimizer, criterion, train_loader,
                     device, epoch, args.print_freq)
-
-        # print('Evaluating...')
-        # evaluate(model, test_loader, device)
-
-        # if epoch % 10 == 0:
-        #     print('Saving...')
-        #     save(model, epoch, args.save_dir, args)
 
     print('Evaluating...')
     evaluate(model, test_loader, device)

@@ -28,8 +28,8 @@ def evaluate(model, train_loader, test_loader, device, args):
     labels = torch.cat(labels, dim=0).cpu().numpy()
 
     # Get cluster centers
-    class_0 = embeds[labels==0].mean(axis=0)
-    class_1 = embeds[labels==1].mean(axis=0)
+    class_0 = embeds[labels == 0].mean(axis=0)
+    class_1 = embeds[labels == 1].mean(axis=0)
 
     # Test embeddings
     embeds, labels = [], []
@@ -48,8 +48,8 @@ def evaluate(model, train_loader, test_loader, device, args):
     dists /= dists.max()
 
     # Added to save FPR, TPR, Prec, and Recall
-    _pos = dists[labels==2]
-    _neg = dists[labels!=2]
+    _pos = dists[labels == 2]
+    _neg = dists[labels != 2]
     pos = np.array(_pos[:]).reshape((-1, 1))
     neg = np.array(_neg[:]).reshape((-1, 1))
     examples = np.squeeze(np.vstack((pos, neg)))
@@ -59,10 +59,10 @@ def evaluate(model, train_loader, test_loader, device, args):
     from sklearn.metrics import roc_curve, precision_recall_curve
     fpr, tpr, _ = roc_curve(labels, examples)
     prec, recall, _ = precision_recall_curve(labels, examples)
-    
-    # # Compute anomaly detection metrics
-    # auroc, aupr, fpr = get_measures(dists[labels==2], dists[labels!=2])
-    # print_measures(auroc, aupr, fpr)
+
+    # Compute anomaly detection metrics
+    auroc, aupr, fpr = get_measures(dists[labels == 2], dists[labels != 2])
+    print_measures(auroc, aupr, fpr)
 
     # Save results
     if args.save_dir:
@@ -71,8 +71,8 @@ def evaluate(model, train_loader, test_loader, device, args):
         file_name = args.resume.split('/')[-1].split('.')[0]
 
         save_path = os.path.join(args.save_dir, file_name)
-        # np.savez(save_path, auroc=auroc, aupr=aupr, fpr=fpr)
-        np.savez(save_path, fpr=fpr, tpr=tpr, prec=prec, recall=recall)
+        np.savez(save_path, auroc=auroc, aupr=aupr,
+                 fpr=fpr, tpr=tpr, prec=prec, recall=recall)
 
 
 def main(args):
@@ -136,8 +136,8 @@ def main(args):
         raise NotImplementedError('Dataset not supported!')
 
     train_loader = DataLoader(train_dataset, batch_size=args.eval_batch_size,
-                             shuffle=False,
-                             num_workers=args.workers)
+                              shuffle=False,
+                              num_workers=args.workers)
     test_loader = DataLoader(test_dataset, batch_size=args.eval_batch_size,
                              shuffle=False,
                              num_workers=args.workers)

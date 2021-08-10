@@ -123,7 +123,6 @@ def compute_map(ranks, gnd, kappas=[]):
 def evaluate(model, loader, device, args):
     model.eval()
     embeds, labels = [], []
-    dists = None
 
     for data in loader:
         samples, _labels = data[0].to(device), data[1]
@@ -159,7 +158,6 @@ def evaluate(model, loader, device, args):
         np.savez(save_path, embeds=embeds.cpu().numpy(),
                  labels=labels.cpu().numpy(), dists=-dists.cpu().numpy(),
                  kappas=kappas, acc=accuracy, mAP=mAP, pr=pr)
-        # np.savez(save_path, kappas=kappas, acc=accuracy, mAP=mAP, pr=pr)
 
 
 def main(args):

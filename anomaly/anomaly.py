@@ -4,6 +4,7 @@ import sklearn.metrics as sk
 recall_level_default = 0.95
 
 
+# Copied from: https://github.com/hendrycks/outlier-exposure/blob/master/utils/display_results.py
 def stable_cumsum(arr, rtol=1e-05, atol=1e-08):
     """Use high precision for cumsum and check that final value matches sum
     Parameters
