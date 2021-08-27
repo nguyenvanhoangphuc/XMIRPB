@@ -59,7 +59,6 @@ class ImageListDataSet(Dataset):
         return len(self.image_list)
 
 
-# @torch.no_grad()
 def process(explainer, loader, device, args):
     if args.self_saliency:  # self-saliency
         dataset = ImageListDataSet(
@@ -69,7 +68,10 @@ def process(explainer, loader, device, args):
 
         for i, data in enumerate(loader):
             samples, paths = data[0].to(device), data[1]
-            salmaps = explainer(samples, samples)
+            if args.explainer == 'sbsm':
+                salmaps = explainer(samples)
+            else:
+                salmaps = explainer(samples, samples)
 
             # convert to numpy
             salmaps = salmaps.cpu().numpy()
@@ -162,7 +164,7 @@ def main(args):
                               [0], *list(model.children())[1:])
         # TODO: Currently DenseNet121-specific
         explainer = SimCAM(model, model[0], target_layers=[
-                           "relu"], fc=model[2] if args.embedding_dim else None)  # added
+                           "relu"], fc=model[2] if args.embedding_dim else None)
     else:
         raise NotImplementedError('Explainer not supported!')
 
@@ -199,7 +201,8 @@ def main(args):
 
     # Compute and save saliency maps
     print('Evaluating...')
-    process(explainer, test_loader, device, args)
+    with torch.set_grad_enabled(args.explainer != 'sbsm'):
+        process(explainer, test_loader, device, args)
 
 
 def parse_args():
@@ -224,16 +227,16 @@ def parse_args():
                         help='Explanation type (sbsm, simatt, or simcam)')
     parser.add_argument('--self-saliency', action='store_true',
                         help='Compute self-similarity saliency')
-    parser.add_argument('--eval-batch-size', default=5, type=int)
+    parser.add_argument('--eval-batch-size', default=1, type=int)
     parser.add_argument('--gpu-batch', default=250, type=int,
                         help='Internal batch size (only used for sbsm)')
-    parser.add_argument('--topk', default=20, type=int,
+    parser.add_argument('--topk', default=5, type=int,
                         help='Number of top-k images to compute saliency')
     parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                         help='Number of data loading workers')
-    parser.add_argument('--save-dir', default=None,
+    parser.add_argument('--save-dir', default='./saliency',
                         help='Result save directory')
-    parser.add_argument('--resume', default='model-t150-tv060.pth',
+    parser.add_argument('--resume', default='',
                         help='Resume from checkpoint')
 
     return parser.parse_args()

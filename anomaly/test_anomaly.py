@@ -167,9 +167,9 @@ def parse_args():
     parser.add_argument('--eval-batch-size', default=64, type=int)
     parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                         help='Number of data loading workers')
-    parser.add_argument('--save-dir', default=None,
+    parser.add_argument('--save-dir', default='./results',
                         help='Result save directory')
-    parser.add_argument('--resume', default='model.pth',
+    parser.add_argument('--resume', default='',
                         help='Resume from checkpoint')
 
     return parser.parse_args()

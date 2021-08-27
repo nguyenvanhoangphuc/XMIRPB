@@ -102,7 +102,7 @@ def main(args):
     torch.manual_seed(args.seed)
 
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    p = args.labels_per_batch
+    p = args.labels_per_batch if not args.anomaly else args.labels_per_batch - 1
     k = args.samples_per_label
     batch_size = p * k
 
@@ -237,9 +237,9 @@ def parse_args():
                         type=int, help='Print frequency')
     parser.add_argument('--seed', type=int, default=0,
                         help='Random seed to use')
-    parser.add_argument('--save-dir', default='.',
+    parser.add_argument('--save-dir', default='./checkpoints',
                         help='Model save directory')
-    parser.add_argument('--resume', default='model.pth',
+    parser.add_argument('--resume', default='',
                         help='Resume from checkpoint')
 
     return parser.parse_args()

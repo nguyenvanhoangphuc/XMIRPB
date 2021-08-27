@@ -10,8 +10,9 @@ from torchvision import transforms
 from evaluation import CausalMetric, gkern
 
 
+# NOTE: Edit the dataset_type and path to model_weights here
 dataset_type = 'covid'
-model_weights = "/data/brian.hu/covid_saliency/covid_densenet121_embed_256_seed_1_epoch_20_ckpt.pth"
+model_weights = '/data/brian.hu/covid_saliency/covid_densenet121_embed_256_seed_1_epoch_20_ckpt.pth'
 
 
 class InsDel():
@@ -119,6 +120,7 @@ query_image_list = []
 class_labels = {}
 
 if dataset_type == 'covid':
+    # NOTE: Edit the path to saliency maps and images here
     main_path = '/data/brian.hu/covid_saliency/simatt/'
     query_img_path = '/data/brian.hu/COVID/data/test/'
     valid_class = ['pneumonia', 'normal']
@@ -132,8 +134,9 @@ if dataset_type == 'covid':
             class_labels[q_na] = label
 
 if dataset_type == 'isic':
-    main_path = '/data/xai/isic_saliency/sbsm'
-    query_img_path = '/data/xai/ISIC-2017_Test_v2_Data'
+    # NOTE: Edit the path to saliency maps and images here
+    main_path = '/data/brian.hu/isic_saliency/sbsm'
+    query_img_path = '/data/brian.hu/isic/ISIC-2017_Test_v2_Data'
     import pandas as pd
     valid_class = ['melanoma', 'seborrheic_keratosis']
     df = pd.read_csv('./ISIC-2017_Test_v2_Part3_GroundTruth_balanced.csv')
@@ -156,6 +159,7 @@ transform = transforms.Compose([
     )
 ])
 
+# NOTE: Edit the final output json files here
 f = open('./inser_dele_wacv_test_simatt.json', 'w')
 f2 = open('./key_list_wacv_test_simatt.json', 'w')
 ins_del_q_dict = {}
