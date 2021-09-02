@@ -79,3 +79,9 @@ We also include code for producing saliency maps (including self-similarity sali
 We also include code for computing the insertion and deletion metrics used to evaluate similarity-based saliency maps (see `evaluate_saliency.py`). At the moment, this requires manually changing the dataset type, paths to the model weights, saliency maps, and test images, and the output filenames in the code. The final results are stored in a `.json` file, where each key is the name of the query image, and the first set of results are the insertion scores and the second set of results are the deletion scores.
 
 Please address all questions to Brian Hu: brian.hu@kitware.com.
+
+### Acknowledgment
+This material is based on research sponsored by the Air Force Research Laboratory and DARPA under Cooperative Agreement number N66001-17-2-4028. The U.S. Government is authorized to reproduce and distribute the code for governmental purposes notwithstanding any copyright notation thereon. Distribution Statement "A" (Approved for Public Release, Distribution Unlimited).
+
+### Disclaimer
+The views and conclusions contained herein are those of the authors and should not be interpreted as necessarily representing the official policies or endorsements, either expressed or implied, of the Air Force Research Laboratory and DARPA or the U.S. Government.
