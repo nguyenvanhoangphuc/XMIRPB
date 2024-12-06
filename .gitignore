@@ -1,0 +1,6 @@
+.git
+.ipynb_checkpoints
+__pycache__
+*/__pycache__
+ISIC-2017_Training_Data/
+data/
